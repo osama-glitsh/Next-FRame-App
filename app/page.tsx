@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { FolderKanban, Clock, PlayCircle, CheckCircle2, ArrowRight } from "lucide-react";
+import { ArrowRight, FolderKanban } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProjectForm from "@/components/ProjectForm";
 import StatusBadge from "@/components/StatusBadge";
-import StatCard from "@/components/StatCard";
+import ActiveProjectHero from "@/components/ActiveProjectHero";
+import WorkflowTimeline from "@/components/WorkflowTimeline";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -58,51 +59,50 @@ export default async function Home() {
     .order("created_at", { ascending: false });
 
   const all = projects ?? [];
-  const stats = {
-    total: all.length,
-    active: all.filter((p) => !["delivered", "archived"].includes(p.status)).length,
-    inProduction: all.filter((p) => p.status === "in_production" || p.status === "qa").length,
-    delivered: all.filter((p) => p.status === "delivered").length,
-  };
+  const displayName = profile?.full_name || `@${profile?.username}`;
+
+  // pick the most recently touched non-finished project as the "active" spotlight
+  const activeProject = all.find((p) => !["delivered", "archived"].includes(p.status)) ?? null;
+  const activeIndex = activeProject ? all.findIndex((p) => p.id === activeProject.id) : 0;
+
+  const countsByStage: Record<string, number> = {};
+  for (const p of all) {
+    countsByStage[p.status] = (countsByStage[p.status] ?? 0) + 1;
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-8">
-      <div className="mb-6 animate-fade-up">
-        <p className="font-mono text-xs uppercase tracking-widest text-signal">لوحة التحكم</p>
-        <h1 className="font-display text-3xl">
-          أهلاً، {profile?.full_name || `@${profile?.username}`}
-        </h1>
-      </div>
+      <ActiveProjectHero fullName={displayName} project={activeProject} index={activeIndex} />
 
-      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="كل المشاريع" value={stats.total} icon={FolderKanban} />
-        <StatCard label="شغالة دلوقتي" value={stats.active} icon={Clock} tone="amber" />
-        <StatCard label="في الإنتاج / QA" value={stats.inProduction} icon={PlayCircle} tone="amber" />
-        <StatCard label="اتسلمت" value={stats.delivered} icon={CheckCircle2} tone="signal" />
-      </div>
+      <WorkflowTimeline countsByStage={countsByStage} />
 
       <div className="grid gap-8 sm:grid-cols-[1fr_1.3fr]">
         <ProjectForm />
 
-        <div className="flex flex-col gap-3">
+        <div id="my-projects" className="flex scroll-mt-24 flex-col gap-3">
           <p className="font-mono text-xs uppercase tracking-widest text-paper-dim">
-            مشاريعي ({all.length})
+            الفريمات المختارة — مشاريعي ({all.length})
           </p>
 
           {all.length === 0 ? (
             <div className="panel flex flex-col items-center gap-2 border-dashed p-8 text-center text-sm text-paper-dim">
               <FolderKanban className="h-6 w-6 text-paper-dim" strokeWidth={1.5} />
-              لسه معملتش أي مشروع. ابعت أول مشروع من الفورم.
+              لسه معملتش أي مشروع. ابعت أول فريم من الفورم.
             </div>
           ) : (
-            all.map((p) => (
-              <div key={p.id} className="panel panel-hover p-4">
-                <div className="mb-2 flex items-start justify-between gap-2">
-                  <h3 className="font-display text-lg leading-snug">{p.title}</h3>
+            all.map((p, i) => (
+              <div key={p.id} className="panel panel-hover p-5">
+                <div className="mb-3 flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-mono text-[10px] text-signal">
+                      FRM // {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="font-display text-xl leading-snug">{p.title}</h3>
+                  </div>
                   <StatusBadge status={p.status} />
                 </div>
-                <p className="mb-2 text-sm text-paper-dim">{p.description}</p>
-                <div className="flex gap-3 font-mono text-[10px] text-paper-dim">
+                <p className="mb-3 text-sm text-paper-dim">{p.description}</p>
+                <div className="flex gap-3 border-t border-ink-line pt-3 font-mono text-[10px] text-paper-dim">
                   {p.category && <span>{p.category}</span>}
                   <span>{new Date(p.created_at).toLocaleDateString("ar-EG")}</span>
                 </div>
