@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0c0c0d;
+  --color-ink-soft: #17181a;
+  --color-ink-line: #262729;
+  --color-paper: #f3f1ea;
+  --color-paper-dim: #cfccc2;
+  --color-signal: #e8362a;
+  --color-signal-dim: #7a1f18;
+  --color-amber: #f2a541;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-line: var(--color-ink-line);
+  --color-paper: var(--color-paper);
+  --color-paper-dim: var(--color-paper-dim);
+  --color-signal: var(--color-signal);
+  --color-signal-dim: var(--color-signal-dim);
+  --color-amber: var(--color-amber);
+  --font-display: var(--font-anton);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jbmono);
+}
+
+* {
+  border-color: var(--color-ink-line);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-inter), sans-serif;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-paper);
+}
+
+.corner-frame {
+  position: relative;
+}
+.corner-frame::before,
+.corner-frame::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--color-signal);
+  pointer-events: none;
+}
+.corner-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--color-signal);
+  border-left: 2px solid var(--color-signal);
+}
+.corner-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--color-signal);
+  border-right: 2px solid var(--color-signal);
+}
+
+.rec-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-signal);
+  box-shadow: 0 0 8px 1px var(--color-signal);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.animate-blink {
+  animation: blink 1.6s ease-in-out infinite;
+}
