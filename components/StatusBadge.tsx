@@ -17,7 +17,11 @@ export default function StatusBadge({ status }: { status: string }) {
     >
       <span
         className={`h-1.5 w-1.5 rounded-full ${
-          isDelivered ? "bg-signal" : isArchived ? "bg-paper-dim" : "bg-amber"
+          isDelivered
+            ? "bg-signal shadow-[0_0_6px_1px_rgba(232,54,42,0.6)]"
+            : isArchived
+            ? "bg-paper-dim"
+            : "bg-amber shadow-[0_0_6px_1px_rgba(242,165,65,0.5)]"
         }`}
       />
       {label}

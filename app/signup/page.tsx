@@ -11,7 +11,7 @@ export default function SignupPage() {
 
   return (
     <div className="mx-auto flex max-w-sm flex-col justify-center px-5 py-16">
-      <div className="corner-frame border border-ink-line bg-ink-soft p-6">
+      <div className="corner-frame panel panel-hover p-6">
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-signal">
           ● REC
         </p>
@@ -67,7 +67,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={pending}
-            className="mt-2 rounded bg-signal py-2 font-mono text-sm text-paper disabled:opacity-50"
+            className="btn-primary mt-2 rounded py-2 font-mono text-sm text-paper disabled:opacity-50"
           >
             {pending ? "..." : "اعمل حساب"}
           </button>

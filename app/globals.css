@@ -34,7 +34,11 @@ html {
 }
 
 body {
-  background: var(--color-ink);
+  background:
+    radial-gradient(ellipse 1200px 600px at 20% -10%, rgba(232, 54, 42, 0.10), transparent 60%),
+    radial-gradient(ellipse 900px 500px at 100% 0%, rgba(242, 165, 65, 0.06), transparent 55%),
+    var(--color-ink);
+  background-attachment: fixed;
   color: var(--color-paper);
   font-family: var(--font-inter), sans-serif;
 }
@@ -42,6 +46,21 @@ body {
 ::selection {
   background: var(--color-signal);
   color: var(--color-paper);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-line);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-signal-dim);
 }
 
 .corner-frame {
@@ -78,10 +97,72 @@ body {
   box-shadow: 0 0 8px 1px var(--color-signal);
 }
 
+/* Elevated glass-style panel used for cards, forms, and dashboard widgets */
+.panel {
+  position: relative;
+  border: 1px solid var(--color-ink-line);
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 40%),
+    var(--color-ink-soft);
+  border-radius: 10px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 12px 30px -18px rgba(0, 0, 0, 0.7);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.panel-hover:hover {
+  border-color: var(--color-signal-dim);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 16px 34px -16px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(232, 54, 42, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Stat card with a signature top accent bar */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-signal), transparent 70%);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #ef4136, var(--color-signal) 60%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 8px 20px -8px rgba(232, 54, 42, 0.55);
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+input, textarea, select {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 0 3px rgba(232, 54, 42, 0.15);
+}
+
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
 }
 .animate-blink {
   animation: blink 1.6s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fade-up 0.35s ease both;
 }

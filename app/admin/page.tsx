@@ -50,7 +50,7 @@ export default async function AdminDashboard() {
           <p className="text-sm text-paper-dim">لسه مفيش مشاريع.</p>
         ) : (
           (projects as unknown as AdminProject[]).map((p) => (
-            <div key={p.id} className="border border-ink-line bg-ink-soft p-4">
+            <div key={p.id} className="panel panel-hover p-4">
               <div className="mb-1 flex items-start justify-between gap-2">
                 <h3 className="font-display text-lg">{p.title}</h3>
                 <StatusBadge status={p.status} />

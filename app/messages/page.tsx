@@ -50,7 +50,7 @@ export default async function MessagesInboxPage() {
           <Link
             key={p.username}
             href={`/messages/${p.username}`}
-            className="border border-ink-line bg-ink-soft p-4 hover:border-signal"
+            className="panel panel-hover p-4 hover:border-signal"
           >
             <p className="font-mono text-sm text-signal">@{p.username}</p>
             <p className="mt-1 truncate text-sm text-paper-dim">{p.last}</p>

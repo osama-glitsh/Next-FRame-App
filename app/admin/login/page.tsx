@@ -10,7 +10,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="mx-auto flex max-w-sm flex-col justify-center px-5 py-24">
-      <div className="corner-frame border border-ink-line bg-ink-soft p-6">
+      <div className="corner-frame panel panel-hover p-6">
         <p className="mb-1 font-mono text-xs uppercase tracking-widest text-amber">
           ADMIN ACCESS
         </p>

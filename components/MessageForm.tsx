@@ -31,7 +31,7 @@ export default function MessageForm({
       />
       <button
         disabled={pending}
-        className="rounded bg-signal px-4 py-2 font-mono text-xs text-paper disabled:opacity-50"
+        className="btn-primary rounded px-4 py-2 font-mono text-xs text-paper disabled:opacity-50"
       >
         {pending ? "..." : "بعت"}
       </button>

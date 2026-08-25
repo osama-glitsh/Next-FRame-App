@@ -36,7 +36,7 @@ export default async function ConversationPage({
         محادثة مع <span className="text-signal">@{partner.username}</span>
       </h1>
 
-      <div className="flex flex-1 flex-col gap-2 overflow-y-auto border border-ink-line bg-ink-soft p-4">
+      <div className="flex flex-1 flex-col gap-2 overflow-y-auto panel panel-hover p-4">
         {!messages || messages.length === 0 ? (
           <p className="m-auto text-sm text-paper-dim">ابدأ المحادثة.</p>
         ) : (

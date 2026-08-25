@@ -28,7 +28,7 @@ export default function PostCard({
   const author = post.profiles?.username ?? "unknown";
 
   return (
-    <article className="border border-ink-line bg-ink-soft p-4">
+    <article className="panel panel-hover p-4">
       <div className="mb-2 flex items-center justify-between">
         <Link href={`/profile/${author}`} className="font-mono text-sm text-signal hover:underline">
           @{author}

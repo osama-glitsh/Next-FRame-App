@@ -55,7 +55,7 @@ export default async function ProfilePage({
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 px-5 py-8">
-      <div className="corner-frame border border-ink-line bg-ink-soft p-5">
+      <div className="corner-frame panel panel-hover p-5">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="font-display text-2xl">

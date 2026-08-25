@@ -14,7 +14,7 @@ export default function PostForm() {
   }, [pending, state.error]);
 
   return (
-    <form ref={formRef} action={formAction} className="flex flex-col gap-2 border border-ink-line bg-ink-soft p-4">
+    <form ref={formRef} action={formAction} className="flex flex-col gap-2 panel panel-hover p-4">
       <textarea
         name="content"
         placeholder="شاركنا حاجة..."
@@ -26,7 +26,7 @@ export default function PostForm() {
       <button
         type="submit"
         disabled={pending}
-        className="self-end rounded bg-signal px-4 py-1.5 font-mono text-xs text-paper disabled:opacity-50"
+        className="btn-primary self-end rounded px-4 py-1.5 font-mono text-xs text-paper disabled:opacity-50"
       >
         {pending ? "..." : "انشر"}
       </button>

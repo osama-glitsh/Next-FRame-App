@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LayoutDashboard, Users, MessageCircle, UserCircle, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/actions/auth";
 
@@ -19,7 +20,7 @@ export default async function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-ink-line bg-ink/95 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-ink-line bg-ink/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
         <Link href="/" className="flex items-center gap-2">
           <span className="rec-dot animate-blink" />
@@ -29,23 +30,40 @@ export default async function Navbar() {
         </Link>
 
         {user ? (
-          <nav className="flex items-center gap-5 text-sm">
-            <Link href="/" className="hover:text-signal">
+          <nav className="flex items-center gap-1 text-sm">
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-paper-dim transition-colors hover:bg-ink-soft hover:text-paper"
+            >
+              <LayoutDashboard className="h-4 w-4" strokeWidth={1.75} />
               مشاريعي
             </Link>
-            <Link href="/community" className="hover:text-signal">
+            <Link
+              href="/community"
+              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-paper-dim transition-colors hover:bg-ink-soft hover:text-paper"
+            >
+              <Users className="h-4 w-4" strokeWidth={1.75} />
               المجتمع
             </Link>
-            <Link href="/messages" className="hover:text-signal">
+            <Link
+              href="/messages"
+              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-paper-dim transition-colors hover:bg-ink-soft hover:text-paper"
+            >
+              <MessageCircle className="h-4 w-4" strokeWidth={1.75} />
               الرسائل
             </Link>
             {username && (
-              <Link href={`/profile/${username}`} className="hover:text-signal">
+              <Link
+                href={`/profile/${username}`}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-paper-dim transition-colors hover:bg-ink-soft hover:text-paper"
+              >
+                <UserCircle className="h-4 w-4" strokeWidth={1.75} />
                 بروفايلي
               </Link>
             )}
-            <form action={signOut}>
-              <button className="font-mono text-xs text-paper-dim hover:text-signal">
+            <form action={signOut} className="ms-1">
+              <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-xs text-paper-dim transition-colors hover:bg-ink-soft hover:text-signal">
+                <LogOut className="h-4 w-4" strokeWidth={1.75} />
                 خروج
               </button>
             </form>
@@ -57,7 +75,7 @@ export default async function Navbar() {
             </Link>
             <Link
               href="/signup"
-              className="corner-frame rounded bg-signal px-3 py-1.5 font-mono text-xs text-paper"
+              className="btn-primary corner-frame rounded px-3 py-1.5 font-mono text-xs text-paper"
             >
               حساب جديد
             </Link>

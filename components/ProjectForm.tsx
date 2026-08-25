@@ -19,7 +19,7 @@ export default function ProjectForm() {
     <form
       ref={formRef}
       action={formAction}
-      className="corner-frame flex flex-col gap-3 border border-ink-line bg-ink-soft p-5"
+      className="corner-frame flex flex-col gap-3 panel panel-hover p-5"
     >
       <p className="font-mono text-xs uppercase tracking-widest text-signal">
         + مشروع جديد
@@ -69,7 +69,7 @@ export default function ProjectForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-1 rounded bg-signal py-2 font-mono text-sm text-paper disabled:opacity-50"
+        className="btn-primary mt-1 rounded py-2 font-mono text-sm text-paper disabled:opacity-50"
       >
         {pending ? "بيتبعت..." : "ابعت المشروع"}
       </button>
