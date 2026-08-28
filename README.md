@@ -1,15 +1,21 @@
-# Next Frame — App
+# Next Frame — App# Next Frame — App
 
 تطبيق ويب شغال بالكامل (Next.js + Supabase) لشركة Next Frame. فيه:
 
 - تسجيل دخول / حساب جديد حقيقي (Supabase Auth)
-- الصفحة الرئيسية: تقديم مشروع جديد + متابعة حالة مشاريعك
-- مجتمع: بوستات، لايك، تعليقات
-- بروفايل لكل مستخدم + متابعة/إلغاء متابعة
+- لوحة تحكم شخصية (Workspace): تقديم مشروع جديد، متابعة تقدمه، تايم لاين المراحل
+- بروفايل لكل مستخدم — بيتحول لـ "Command Center" شخصي للمستخدم نفسه (مشاريعه + إحصائياته)، وصفحة عرض عادية لباقي المستخدمين (فريماته المنشورة بس، من غير أي بيانات خاصة)
+- مجتمع (Studio): بوستات، لايك، تعليقات، متابعة/إلغاء متابعة
 - رسائل مباشرة بين المستخدمين
-- داش بورد أدمن منفصل (كلمة سر بس، مش حساب Supabase) — عرض كل المشاريع، تغيير الحالة، إضافة ملاحظة للعميل
+- **داش بورد أدمن احترافي كامل** (كلمة سر منفصلة، مش حساب Supabase عادي):
+  - نظرة عامة: إحصائيات حية (عدد المستخدمين، المشاريع، البوستات، توزيع المشاريع حسب الحالة)
+  - إدارة المشاريع: تغيير الحالة، إضافة ملاحظة للعميل
+  - إدارة المستخدمين: عدد مشاريع/بوستات كل مستخدم، وترقية/إلغاء صلاحية أدمن
+  - إدارة البوستات: مراجعة وحذف أي بوست في المجتمع
+  - شكل ثابت بقائمة جانبية (Sidebar) على الديسكتوب، وقائمة قابلة للطي على الموبايل
+- الموقع كله متجاوب بالكامل على الموبايل (قائمة تنقل بالهامبرغر عند الشاشات الصغيرة)
 
-الهوية البصرية (الألوان + الخطوط: Anton / Inter / JetBrains Mono) متطبقة زي البراند بوك بالظبط.
+الهوية البصرية (الألوان + الخطوط: Anton / Inter / JetBrains Mono) متطبقة زي البراند بوك بالظبط، بأسلوب سينمائي/مجلات (تايبوجرافي كبير، تايم لاين مراحل، كروت بترقيم).
 
 ---
 
@@ -19,11 +25,18 @@
 2. اعمل **New Project**.
 3. من **Project Settings -> API** خد:
    - `Project URL`
-   - `anon public key`
+   - `anon public key` (Publishable key)
 4. من **SQL Editor** جوه المشروع، افتح **New query**، الصق محتوى ملف
    `supabase/schema.sql` الموجود في المشروع ده، واضغط **Run**.
    ده هيعمل كل الجداول (profiles, projects, posts, follows, messages...)
    مع كل صلاحيات الأمان (Row Level Security).
+5. من **Settings -> API** برضو، انزل لقسم **Secret keys** أو **Legacy anon,
+   service_role API keys**، وانسخ **service_role secret key**. ده مفتاح
+   مختلف تمامًا عن الـ publishable key — بيدّي لوحة الأدمن صلاحية كاملة على
+   قاعدة البيانات (تشوف وتعدّل كل حاجة بغض النظر عن أي حساب مسجل دخول في
+   نفس المتصفح). **متحطش المفتاح ده في متغير اسمه بادئ بـ NEXT_PUBLIC_، ولا
+   تشاركه مع حد أبدًا** — لو اتسرب، أي حد معاه يقدر يتحكم في قاعدة بياناتك
+   بالكامل.
 
 ### تعطيل تأكيد الإيميل (اختياري، للتجربة بسرعة)
 
@@ -34,24 +47,17 @@
 
 (لو سايبها شغالة، المستخدم هيحتاج يأكد إيميله الأول قبل ما يقدر يسجل دخول.)
 
-### تخلي حسابك أدمن (بيانات فقط، مش داش بورد الأدمن اللي بكلمة السر)
-
-لو عايز مستخدم معين يظهر كـ admin جوه جدول profiles (مش مطلوب لداش بورد
-الأدمن بتاعنا لأنه بيشتغل بكلمة سر منفصلة، بس ممكن تستخدمه لاحقًا):
-
-```sql
-update profiles set is_admin = true
-where id = (select id from auth.users where email = 'you@example.com');
-```
-
 ---
 
 ## 2) شغّل المشروع على جهازك
 
 ```bash
 cp .env.local.example .env.local
-# افتح .env.local واملأ NEXT_PUBLIC_SUPABASE_URL و NEXT_PUBLIC_SUPABASE_ANON_KEY
-# وحط كلمة سر قوية في ADMIN_PASSWORD
+# افتح .env.local واملأ:
+#   NEXT_PUBLIC_SUPABASE_URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY
+#   SUPABASE_SERVICE_ROLE_KEY
+#   ADMIN_PASSWORD (اختار كلمة سر قوية بنفسك)
 
 npm install
 npm run dev
@@ -69,11 +75,12 @@ npm run dev
 
 1. ارفع الكود على GitHub repo.
 2. من Vercel: **New Project** -> اختار الـ repo.
-3. في **Environment Variables** ضيف نفس المتغيرات اللي في `.env.local`:
+3. في **Environment Variables** ضيف نفس المتغيرات الأربعة اللي في `.env.local`:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
    - `ADMIN_PASSWORD`
-4. Deploy.
+4. Deploy، وبعد أي تعديل تاني في الكود لازم تعمل Redeploy عشان يشتغل بالتغييرات.
 
 Supabase الفري تير بيدّيك: قاعدة بيانات Postgres، Auth، وحتى 500MB تخزين —
 كافي جدًا للـ MVP والاختبار الأول مع عملاء حقيقيين من غير ما تدفع حاجة.
@@ -84,31 +91,51 @@ Supabase الفري تير بيدّيك: قاعدة بيانات Postgres، Auth
 
 ```
 app/
-  page.tsx                    الرئيسية (هبوط + مشاريعي)
-  login/, signup/             الدخول والتسجيل
-  community/                  فيد المجتمع
-  profile/[username]/         بروفايل + متابعة
-  messages/, messages/[username]/   الرسائل
-  admin/login/, admin/        داش بورد الأدمن
+  layout.tsx                      الهيكل العام (خطوط + html) — من غير أي navbar
+  (site)/                         كل صفحات الموقع العادية (تحتوي الـ Navbar تلقائيًا)
+    page.tsx                      لوحة التحكم الشخصية (Workspace)
+    login/, signup/                الدخول والتسجيل
+    community/                     Studio — فيد المجتمع
+    profile/[username]/            بروفايل + Command Center للمستخدم نفسه
+    messages/, messages/[username]/  الرسائل
+  admin/
+    login/                         تسجيل دخول الأدمن (كلمة سر منفصلة)
+    (dashboard)/                   كل صفحات لوحة الأدمن (Sidebar تلقائي)
+      page.tsx                     نظرة عامة
+      projects/                    إدارة المشاريع
+      users/                       إدارة المستخدمين
+      posts/                       إدارة/حذف البوستات
 lib/
-  supabase/                   عملاء Supabase (browser/server/middleware)
-  actions/                    كل الـ server actions (auth, projects, posts, follows, messages, admin)
-  status.ts                   حالات المشروع
-components/                   مكونات مشتركة (Navbar, Forms, Cards...)
-supabase/schema.sql           سكيما قاعدة البيانات كاملة
+  supabase/
+    client.ts, server.ts, middleware.ts   عملاء Supabase العاديين (anon key + RLS)
+    admin.ts                        عميل خاص بلوحة الأدمن بس (service role key، يتخطى RLS)
+  actions/                         كل الـ server actions (auth, projects, posts, follows, messages, admin)
+  status.ts                        حالات المشروع وتايم لاين المراحل
+components/                        مكونات مشتركة (Navbar, AdminSidebar, Forms, Cards...)
+supabase/schema.sql                سكيما قاعدة البيانات كاملة
 ```
 
-## حالة المشروع الحالية (MVP شغال بالكامل، اتعمل له build نضيف بدون أخطاء)
+## ملاحظة أمان مهمة
+
+لوحة الأدمن بتستخدم مفتاح `service_role` اللي بيتخطى كل قواعد الأمان
+(Row Level Security) في قاعدة البيانات — وده مقصود، عشان الأدمن يشوف
+ويتحكم في كل حاجة بغض النظر عن حالة تسجيل دخوله في Supabase. الحماية
+الوحيدة على `/admin/*` هي كلمة سر `ADMIN_PASSWORD`، فلازم تكون قوية،
+ومتشاركهاش مع حد مش موثوق فيه.
+
+## حالة المشروع الحالية (MVP شغال بالكامل، اتعمل له build ونظاف بدون أخطاء)
 
 تم فعليًا — مش مجرد تصميم:
 - Auth حقيقي (signup/login/logout) عبر Supabase
-- تقديم ومتابعة المشاريع (متربط بقاعدة بيانات حقيقية)
+- تقديم ومتابعة المشاريع (متربط بقاعدة بيانات حقيقية) + تايم لاين مراحل حي
 - مجتمع: بوست/لايك/كومنت شغالين فعليًا
 - متابعة/إلغاء متابعة بين المستخدمين
 - رسائل مباشرة (Direct messages) متخزنة وقابلة للقراءة
-- داش بورد أدمن بكلمة سر منفصلة، بيقدر يغيّر حالة أي مشروع ويبعت ملاحظة
+- بروفايل شخصي بيعرض لوحة تحكم كاملة (لصاحبه) أو ملف عام (لغيره) — من غير تسريب بيانات خاصة
+- داش بورد أدمن كامل: نظرة عامة، مشاريع، مستخدمين، بوستات — كله شغال على مفتاح مستقل يشوف كل حاجة دايمًا
+- الموقع متجاوب بالكامل على الموبايل
 
 باقي (اختياري للمراحل الجاية):
-- رفع صور للبوستات/المشاريع (يحتاج Supabase Storage bucket)
+- رفع صور حقيقية لغلاف كل مشروع/بوست (يحتاج Supabase Storage bucket)
 - إشعارات لحظية (Realtime) للرسائل بدل الريفريش
 - تطبيق موبايل حقيقي (iOS/Android) — الحالي ويب-أب شغال على الموبايل والديسكتوب من المتصفح مباشرة، وممكن نحوله لـ PWA أو نغلفه بـ Capacitor لاحقًا
